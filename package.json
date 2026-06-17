@@ -8,7 +8,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "mock:generate": "node mock/generate-db.mjs",
-    "mock": "npm run mock:generate && json-server --watch mock/db.json --port 3000"
+    "mock": "npm run mock:generate && json-server --watch mock/db.json --port 3000",
+    "server": "json-server --watch mock/db.json --port 3000"
   },
   "private": true,
   "packageManager": "npm@11.16.0",
