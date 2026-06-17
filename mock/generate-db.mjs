@@ -16,8 +16,8 @@ const users = Array.from({ length: 99 }, (_, index) => {
     email: faker.internet.email({ firstName, lastName }).toLowerCase(),
     avatar: faker.image.avatar(),
     phone: faker.phone.number(),
-    jobTitle: faker.person.jobTitle(),
-    company: faker.company.name(),
+    department: faker.helpers.arrayElement(["Human Resources", "Finance", "Marketing", "Marketing", "Engineering", "Product Management"]),
+    role: faker.helpers.arrayElement(["Admin", "Viewer", "Editor"]),
     address: {
       street: faker.location.streetAddress(),
       city: faker.location.city(),
@@ -26,7 +26,7 @@ const users = Array.from({ length: 99 }, (_, index) => {
       zipCode: faker.location.zipCode(),
     },
     createdAt: faker.date.past({ years: 2 }).toISOString(),
-    active: faker.datatype.boolean(),
+    status: faker.helpers.arrayElement(["Active", "Inactive"]),
   };
 });
 
