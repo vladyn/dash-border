@@ -1,0 +1,13 @@
+GET http://localhost:3000/users/1
+###
+
+GET http://localhost:3000/users
+###
+
+
+GET http://localhost:3000/users?q=sally
+###
+
+GET http://localhost:3000/users
+###
+
