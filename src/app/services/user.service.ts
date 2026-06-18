@@ -19,7 +19,7 @@ export interface User {
 })
 export class UserService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'https://restful-api-vercel-rho.vercel.app/users'; //'http://localhost:3000/users';
+  private readonly apiUrl = 'https://restful-api-vercel-7itg3tlgc-vladyns-projects.vercel.app/users';
   // private readonly apiUrl = 'http://localhost:3000/users';
 
   // Signals for state management
