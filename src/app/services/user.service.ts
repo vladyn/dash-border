@@ -15,11 +15,11 @@ export interface User {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:3000/users';
+  private readonly apiUrl = 'https://restful-api-vercel-rho.vercel.app/users'; //'http://localhost:3000/users';
 
   // Signals for state management
   private readonly _users = signal<User[]>([]);
@@ -34,7 +34,13 @@ export class UserService {
     const term = this.searchTerm().trim().toLowerCase();
     const allUsers = this._users();
     if (!term) return allUsers;
-    return allUsers.filter(user => user.name.toLowerCase().includes(term) || user.status.toLowerCase().includes(term) || user.role.toLowerCase().includes(term) || user.department.toLowerCase().includes(term));
+    return allUsers.filter(
+      (user) =>
+        user.name.toLowerCase().includes(term) ||
+        user.status.toLowerCase().includes(term) ||
+        user.role.toLowerCase().includes(term) ||
+        user.department.toLowerCase().includes(term),
+    );
   });
 
   // Load users from API
@@ -42,16 +48,19 @@ export class UserService {
     this.loading.set(true);
     this.error.set(null);
 
-    this.http.get<User[]>(this.apiUrl)
+    this.http
+      .get<User[]>(this.apiUrl)
       .pipe(
-        catchError(err => {
+        catchError((err) => {
           console.error('Failed to load users:', err);
-          this.error.set('Failed to connect to the backend. Please check that the server is running on http://localhost:3000.');
+          this.error.set(
+            'Failed to connect to the backend. Please check that the server is running on http://localhost:3000.',
+          );
           return throwError(() => err);
         }),
-        finalize(() => this.loading.set(false))
+        finalize(() => this.loading.set(false)),
       )
-      .subscribe(data => {
+      .subscribe((data) => {
         this._users.set(data);
       });
   }
@@ -61,18 +70,19 @@ export class UserService {
     this.loading.set(true);
     this.error.set(null);
 
-    return this.http.post<User>(this.apiUrl, user)
+    return this.http
+      .post<User>(this.apiUrl, user)
       .pipe(
-        catchError(err => {
+        catchError((err) => {
           console.error('Failed to add user:', err);
           this.error.set('Failed to create user. Please try again.');
           return throwError(() => err);
         }),
-        finalize(() => this.loading.set(false))
+        finalize(() => this.loading.set(false)),
       )
-      .subscribe(newUser => {
+      .subscribe((newUser) => {
         // Optimistically update or just prepend
-        this._users.update(current => [newUser, ...current]);
+        this._users.update((current) => [newUser, ...current]);
       });
   }
 
@@ -82,18 +92,19 @@ export class UserService {
     this.loading.set(true);
     this.error.set(null);
 
-    return this.http.put<User>(`${this.apiUrl}/${user.id}`, user)
+    return this.http
+      .put<User>(`${this.apiUrl}/${user.id}`, user)
       .pipe(
-        catchError(err => {
+        catchError((err) => {
           console.error('Failed to update user:', err);
           this.error.set('Failed to update user. Please try again.');
           return throwError(() => err);
         }),
-        finalize(() => this.loading.set(false))
+        finalize(() => this.loading.set(false)),
       )
-      .subscribe(updatedUser => {
-        this._users.update(current =>
-          current.map(u => u.id === updatedUser.id ? updatedUser : u)
+      .subscribe((updatedUser) => {
+        this._users.update((current) =>
+          current.map((u) => (u.id === updatedUser.id ? updatedUser : u)),
         );
       });
   }
@@ -103,17 +114,18 @@ export class UserService {
     this.loading.set(true);
     this.error.set(null);
 
-    return this.http.delete<User>(`${this.apiUrl}/${id}`)
+    return this.http
+      .delete<User>(`${this.apiUrl}/${id}`)
       .pipe(
-        catchError(err => {
+        catchError((err) => {
           console.error('Failed to delete user:', err);
           this.error.set('Failed to delete user. Please try again.');
           return throwError(() => err);
         }),
-        finalize(() => this.loading.set(false))
+        finalize(() => this.loading.set(false)),
       )
       .subscribe(() => {
-        this._users.update(current => current.filter(u => u.id !== id));
+        this._users.update((current) => current.filter((u) => u.id !== id));
       });
   }
 }
