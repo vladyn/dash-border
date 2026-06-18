@@ -16,7 +16,7 @@ const users = Array.from({ length: 99 }, (_, index) => {
     email: faker.internet.email({ firstName, lastName }).toLowerCase(),
     avatar: faker.image.avatar(),
     phone: faker.phone.number(),
-    department: faker.helpers.arrayElement(["Human Resources", "Finance", "Marketing", "Marketing", "Engineering", "Product Management"]),
+    department: faker.helpers.arrayElement(["Human Resources", "Finance", "Marketing", "Engineering", "Product Management"]),
     role: faker.helpers.arrayElement(["Admin", "Viewer", "Editor"]),
     address: {
       street: faker.location.streetAddress(),
