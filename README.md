@@ -41,21 +41,7 @@ The application will automatically reload whenever you modify any of the source 
 ## Deployment 
 
 This is an automatically deployed app to Vercel. https://dash-border.vercel.app/ 
-Service is located at https://restful-api-vercel-rho.vercel.app/
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
+Service is located at https://restful-api-vercel-2pbh.onrender.com/
 
 ## Audit of the given wireframe
 
