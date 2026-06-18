@@ -9,11 +9,11 @@
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <label for="name">Full Name</label>
-      <input 
+      <input
         id="name"
-        type="text" 
-        class="form-control" 
-        formControlName="name" 
+        type="text"
+        class="form-control"
+        formControlName="name"
         placeholder="e.g. Sarah Connor"
         autocomplete="name"
       >
@@ -30,12 +30,17 @@
     </div>
 
     <div class="form-group">
+      <img src="/assets/images/Rambo-First-Blood.webp" alt="Rambo First Blood" class="profile-image">
+      <input type="hidden" id="avatar" name="avatar" value="/assets/images/Rambo-First-Blood.webp" formControlName="avatar">
+    </div>
+
+    <div class="form-group">
       <label for="email">Email Address</label>
-      <input 
+      <input
         id="email"
-        type="email" 
-        class="form-control" 
-        formControlName="email" 
+        type="email"
+        class="form-control"
+        formControlName="email"
         placeholder="e.g. sarah.connor@example.com"
         autocomplete="email"
       >

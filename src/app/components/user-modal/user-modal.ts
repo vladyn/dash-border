@@ -24,7 +24,8 @@ export class UserModal implements OnChanges {
     email: ['', [Validators.required, Validators.email]],
     role: ['Viewer', [Validators.required]],
     department: ['Engineering', [Validators.required]],
-    status: ['Active', [Validators.required]]
+    status: ['Active', [Validators.required]],
+    avatar: ['/assets/images/Rambo-First-Blood.webp']
   });
 
   roles = ['Admin', 'Editor', 'Viewer'];
@@ -37,13 +38,15 @@ export class UserModal implements OnChanges {
         email: this.user.email,
         role: this.user.role,
         department: this.user.department,
-        status: this.user.status
+        status: this.user.status,
+        avatar: this.user.avatar
       });
     } else {
       this.form.reset({
         role: 'Viewer',
         department: 'Engineering',
-        status: 'Active'
+        status: 'Active',
+        avatar: '/assets/images/Rambo-First-Blood.webp'
       });
     }
   }
