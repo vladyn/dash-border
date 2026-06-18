@@ -1,0 +1,36 @@
+.confirm-content {
+  text-align: center;
+  padding: 8px 0;
+}
+
+.alert-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background-color: var(--danger-bg);
+  border: 1px solid var(--danger-border);
+  color: var(--danger);
+  margin: 0 auto 16px auto;
+}
+
+.alert-icon span {
+  font-size: 28px;
+}
+
+h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+.modal-footer {
+  margin-top: 24px;
+}

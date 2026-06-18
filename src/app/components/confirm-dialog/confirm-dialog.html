@@ -1,0 +1,19 @@
+<dialog #dialog>
+  <div class="confirm-content">
+    <div class="alert-icon flex align-center justify-center">
+      <span class="icon">warning</span>
+    </div>
+    
+    <h3>Delete User Account</h3>
+    <p>Are you sure you want to delete <strong>{{ user?.name }}</strong>'s account? This action is permanent and cannot be undone.</p>
+    
+    <div class="modal-footer flex gap-sm">
+      <button type="button" class="btn btn-secondary w-full" (click)="close()">
+        Cancel
+      </button>
+      <button type="button" class="btn btn-danger w-full" (click)="onConfirm()">
+        Delete Account
+      </button>
+    </div>
+  </div>
+</dialog>

@@ -3,7 +3,7 @@
   "version": 1,
   "cli": {
     "packageManager": "npm",
-    "analytics": "0a7e46fc-d611-43e3-ac5f-4eea149bf457"
+    "analytics": "10ee2e49-001a-41da-9391-9f41ace1da7b"
   },
   "newProjectRoot": "projects",
   "projects": {
@@ -20,10 +20,8 @@
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
+              "assets",
+              "assets/images"
             ],
             "styles": [
               "src/styles.css"
@@ -39,8 +37,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "maximumWarning": "20kB",
+                  "maximumError": "40kB"
                 }
               ],
               "outputHashing": "all"
