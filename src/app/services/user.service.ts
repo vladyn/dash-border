@@ -4,6 +4,7 @@ import { catchError, finalize } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 
 export interface User {
+  phone: string;
   id?: string;
   name: string;
   email: string;

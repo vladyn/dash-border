@@ -22,7 +22,7 @@ export class UserModal implements OnChanges {
   readonly form: FormGroup = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(3)]],
     email: ['', [Validators.required, Validators.email]],
-    phone: ['', [Validators.required, Validators.pattern(/^\d{6,16}$/)]],
+    phone: ['', [Validators.required]],
     role: ['Viewer', [Validators.required]],
     department: ['Engineering', [Validators.required]],
     status: ['Active', [Validators.required]],
@@ -48,6 +48,7 @@ export class UserModal implements OnChanges {
         department: this.user.department,
         status: this.user.status,
         avatar: this.user.avatar,
+        phone: this.user.phone,
       });
     } else {
       this.form.reset({
