@@ -1,6 +1,30 @@
-# UserDashboard
+# Dash-Border - UserDashboard
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.0.1.
+An example dashboard for managing users with mocked data, limited functionality to the basic level of the prototype per the requirements.
+
+## Generating mock data
+Data generation was done with Faker.JS
+
+```bash
+npm run mock:generate
+```
+
+## Local server
+
+Project points to a separate deployment of the mocked data, but you can run it as a local instance by running the local server
+
+```bash
+npm run server
+```
+or 
+
+```bash
+npm run mock
+```
+
+Will regenerate data and run the server. 
+
+Note: If you count on local, you should uncomment line 23 and comment line 22 in "app/services/user.service.js"
 
 ## Development server
 
@@ -10,7 +34,14 @@ To start a local development server, run:
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+If you go Local - `http://localhost:4200/`. 
+Default will point you to the deployed service.
+The application will automatically reload whenever you modify any of the source files.
+
+## Deployment 
+
+This is an automatically deployed app to Vercel. https://dash-border.vercel.app/ 
+Service is located at https://restful-api-vercel-rho.vercel.app/
 
 ## Code scaffolding
 
@@ -26,34 +57,46 @@ For a complete list of available schematics (such as `components`, `directives`,
 ng generate --help
 ```
 
-## Building
+## Audit of the given wireframe
 
-To build the project run:
+![The Wireframe](wireframe.jpg)
 
-```bash
-ng build
-```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+### Initial thoughts  
 
-## Running unit tests
+In general, if I receive such a wireframe, I would call it a raw, fast sketch generated from either a stronghold or a technically focused person or business. 
+It contains the idea, but it's also a quick and dirty sketch with many minor patterns, which can be improved. 
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+### Action 
 
-```bash
-ng test
-```
+I'll start with the horizontal tabs and replace them with vertical ones, placed on the left. 
+Avoiding horizontal tabs will make the implementation of responsive behavior easier. 
+Avoiding horizontal tabs will also improve the scalability. 
+I'll move the system and settings to the top right corner, where we can also add other tools for fine-tuning the Dash-Border. Like theme switch, notifications, etc.
+Vertically placed tabs can give you a more convenient way to navigate through the main tabs (which I suppose will be the most common scenario, as they should be more often used, rather than the other system, settings, etc.)
+Top right icon-based system-related buttons are less space-consuming that way.
 
-## Running end-to-end tests
+### Filtering
 
-For end-to-end (e2e) testing, run:
+I would prefer to have fewer visual controls for filtering, but more intuitive behavior in them. 
+The filtering could be applied to all the top-level controls.
+ - banners are clickable
+ - drop-down behaves as expected
+ - The search box, though, accepts any of the criteria. This way, we are unleashing more power for sorting from the keyboard.
+ - Action buttons for user creation and those for editing and deleting are pulled to the right as the right-handed mode is most of the cases. 
 
-```bash
-ng e2e
-```
+## UI/UX Design
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+The redesigned dashboard introduces a remake of the wireframe with the above features implemented. Also:
+ - a high-fidelity design
+ - responsive behavior
+ - basic accessibility
+ - implementation of filtering 
+ - functionality for adding, deleting, and editing a user
 
-## Additional Resources
+## AI Assistance
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Angular was chosen as the last thing I achieved, with the latest versions of this framework. 
+After a basic bootstrap, I used prompts to get the color theme, layout, and table. The dialog components skeleton was generated initially and then fine-tuned.
+The same goes for the service responsible for fetching. Styles are almost AI-based on Material UI.
+Mock server I did manually and mapped data too (using Faker.JS). I used Gemini Flash Preview on a free tier. 
