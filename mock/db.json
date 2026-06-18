@@ -2130,6 +2130,16 @@
       "status": "Active",
       "avatar": "/assets/images/Rambo-First-Blood.webp",
       "id": "stv46BSOS8M"
+    },
+    {
+      "name": "Vladimir Varbanov",
+      "email": "vlado@vlado1.com",
+      "phone": 3233242344,
+      "role": "Viewer",
+      "department": "Engineering",
+      "status": "Active",
+      "avatar": "/assets/images/Rambo-First-Blood.webp",
+      "id": "RBuLKS_tttw"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

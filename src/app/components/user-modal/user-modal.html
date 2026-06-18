@@ -30,7 +30,8 @@
     </div>
 
     <div class="form-group">
-      <img src="/assets/images/Rambo-First-Blood.webp" alt="Rambo First Blood" class="profile-image">
+      <img ngSrc="/assets/images/Rambo-First-Blood.webp" alt="Rambo First Blood" class="profile-image" width="80"
+           height="44">
       <input type="hidden" id="avatar" name="avatar" value="/assets/images/Rambo-First-Blood.webp" formControlName="avatar">
     </div>
 
@@ -51,6 +52,28 @@
             Email is required.
           } @else if (form.get('email')?.errors?.['email']) {
             Please enter a valid email address.
+          }
+        </div>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="phone">Phone</label>
+      <input
+        id="phone"
+        type="number"
+        class="form-control"
+        formControlName="phone"
+        placeholder="089"
+        autocomplete="phone"
+      >
+      @if (isInvalid('phone')) {
+        <div class="error-text">
+          <span class="icon" style="font-size: 14px;">error</span>
+          @if (form.get('phone')?.errors?.['required']) {
+            A phone is required.
+          } @else if (form.get('phone')?.errors?.['phone']) {
+            Please enter a valid phone number.
           }
         </div>
       }
