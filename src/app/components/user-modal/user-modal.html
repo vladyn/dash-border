@@ -1,0 +1,91 @@
+<dialog #dialog>
+  <div class="modal-header flex align-center justify-between m-b-md">
+    <h2>{{ user ? 'Edit Profile' : 'Add New Member' }}</h2>
+    <button class="btn btn-secondary btn-icon-only" (click)="close()">
+      <span class="icon">close</span>
+    </button>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="name">Full Name</label>
+      <input 
+        id="name"
+        type="text" 
+        class="form-control" 
+        formControlName="name" 
+        placeholder="e.g. Sarah Connor"
+        autocomplete="name"
+      >
+      @if (isInvalid('name')) {
+        <div class="error-text">
+          <span class="icon" style="font-size: 14px;">error</span>
+          @if (form.get('name')?.errors?.['required']) {
+            Name is required.
+          } @else if (form.get('name')?.errors?.['minlength']) {
+            Name must be at least 3 characters.
+          }
+        </div>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email Address</label>
+      <input 
+        id="email"
+        type="email" 
+        class="form-control" 
+        formControlName="email" 
+        placeholder="e.g. sarah.connor@example.com"
+        autocomplete="email"
+      >
+      @if (isInvalid('email')) {
+        <div class="error-text">
+          <span class="icon" style="font-size: 14px;">error</span>
+          @if (form.get('email')?.errors?.['required']) {
+            Email is required.
+          } @else if (form.get('email')?.errors?.['email']) {
+            Please enter a valid email address.
+          }
+        </div>
+      }
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="role">Role</label>
+        <select id="role" class="form-control" formControlName="role">
+          @for (role of roles; track role) {
+            <option [value]="role">{{ role }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="status">Status</label>
+        <select id="status" class="form-control" formControlName="status">
+          <option value="Active">Active</option>
+          <option value="Inactive">Inactive</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="department">Department</label>
+      <select id="department" class="form-control" formControlName="department">
+        @for (dept of departments; track dept) {
+          <option [value]="dept">{{ dept }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="modal-footer flex gap-sm m-t-lg">
+      <button type="button" class="btn btn-secondary w-full" (click)="close()">
+        Cancel
+      </button>
+      <button type="submit" class="btn btn-primary w-full">
+        {{ user ? 'Save Changes' : 'Add Member' }}
+      </button>
+    </div>
+  </form>
+</dialog>
