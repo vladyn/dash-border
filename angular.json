@@ -7,7 +7,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "user-dashboard": {
+    "dash-border": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -55,10 +55,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "user-dashboard:build:production"
+              "buildTarget": "dash-border:build:production"
             },
             "development": {
-              "buildTarget": "user-dashboard:build:development"
+              "buildTarget": "dash-border:build:development"
             }
           },
           "defaultConfiguration": "development"
