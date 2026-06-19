@@ -24,7 +24,7 @@ npm run mock
 
 Will regenerate data and run the server. 
 
-Note: If you count on local, you should uncomment line 23 and comment line 22 in "app/services/user.service.js"
+Note: If you count on local, you should uncomment line 22 and comment line 23 in "app/services/user.service.js"
 
 ## Development server
 
@@ -41,7 +41,7 @@ The application will automatically reload whenever you modify any of the source 
 ## Deployment 
 
 This is an automatically deployed app to Vercel. https://dash-border.vercel.app/ 
-Service is located at https://restful-api-vercel-2pbh.onrender.com/
+Service is located at https://restful-api-vercel-2pbh.onrender.com/ (If the above has difficulties connecting to the API, click this link to fire up the tier.)
 
 ## Audit of the given wireframe
 
