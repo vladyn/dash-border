@@ -1,7 +1,5 @@
-import { Injectable, inject, signal, computed } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { catchError, finalize } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { Injectable, inject, signal, computed, Injector } from '@angular/core';
+import { httpResource } from '@angular/common/http';
 
 export interface User {
   phone: string;
@@ -18,22 +16,29 @@ export interface User {
   providedIn: 'root',
 })
 export class UserService {
-  private readonly http = inject(HttpClient);
+  // Injector for creating httpResource outside of injection context
+  private readonly injector = inject(Injector);
+  // Use HttpResource to back this service via signals/resources
+  private readonly usersResource = httpResource<User[]>(() => this.apiUrl, { injector: this.injector });
   // private readonly apiUrl = 'http://localhost:3000/users';
   private readonly apiUrl = 'https://restful-api-vercel-2pbh.onrender.com/users';
 
-  // Signals for state management
-  private readonly _users = signal<User[]>([]);
-  readonly users = this._users.asReadonly();
+  // Expose the users as a readonly signal derived from the resource
+  readonly users = computed(() => this.usersResource.value() ?? []);
 
-  readonly loading = signal<boolean>(false);
-  readonly error = signal<string | null>(null);
+  // Loading and error signals backed by the resource
+  readonly loading = computed(() => this.usersResource.isLoading());
+  readonly error = computed(() => {
+    const err = this.usersResource.error();
+    return err ? String(err.message ?? err) : null;
+  });
+
   readonly searchTerm = signal<string>('');
 
   // Computed signal to filter users by name locally in real-time
   readonly filteredUsers = computed(() => {
     const term = this.searchTerm().trim().toLowerCase();
-    const allUsers = this._users();
+    const allUsers = this.users();
     if (!term) return allUsers;
     return allUsers.filter(
       (user) =>
@@ -44,89 +49,66 @@ export class UserService {
     );
   });
 
-  // Load users from API
+  // Trigger a reload of the users resource
   loadUsers() {
-    this.loading.set(true);
-    this.error.set(null);
+    this.usersResource.reload();
+  }
 
-    this.http
-      .get<User[]>(this.apiUrl)
-      .pipe(
-        catchError((err) => {
-          console.error('Failed to load users:', err);
-          this.error.set(
-            'Failed to connect to the backend. Please check that the server is running on http://localhost:3000.',
-          );
-          return throwError(() => err);
-        }),
-        finalize(() => this.loading.set(false)),
-      )
-      .subscribe((data) => {
-        this._users.set(data);
-      });
+  // Helper: perform mutating request via httpResource and wait for result
+  private async runRequest<T>(request: () => any): Promise<T> {
+    const ref = httpResource<T>(request, { injector: this.injector });
+    // Trigger load (resource may auto-load, but reload ensures it starts)
+    ref.reload();
+    // Poll for completion
+    return await new Promise<T>((resolve, reject) => {
+      const check = () => {
+        const status = ref.status();
+        if (status === 'resolved') {
+          resolve(ref.value() as T);
+        } else if (status === 'error') {
+          reject(ref.error());
+        } else {
+          setTimeout(check, 50);
+        }
+      };
+      check();
+    });
   }
 
   // Add a new user
-  addUser(user: User) {
-    this.loading.set(true);
-    this.error.set(null);
-
-    return this.http
-      .post<User>(this.apiUrl, user)
-      .pipe(
-        catchError((err) => {
-          console.error('Failed to add user:', err);
-          this.error.set('Failed to create user. Please try again.');
-          return throwError(() => err);
-        }),
-        finalize(() => this.loading.set(false)),
-      )
-      .subscribe((newUser) => {
-        // Optimistically update or just prepend
-        this._users.update((current) => [newUser, ...current]);
-      });
+  async addUser(user: User) {
+    try {
+      const newUser = await this.runRequest<User>(() => ({ url: this.apiUrl, method: 'POST', body: user }));
+      // Refresh list after mutation
+      this.usersResource.reload();
+      return newUser;
+    } catch (err) {
+      console.error('Failed to add user:', err);
+      throw err;
+    }
   }
 
   // Update an existing user
-  updateUser(user: User) {
+  async updateUser(user: User) {
     if (!user.id) return;
-    this.loading.set(true);
-    this.error.set(null);
-
-    return this.http
-      .put<User>(`${this.apiUrl}/${user.id}`, user)
-      .pipe(
-        catchError((err) => {
-          console.error('Failed to update user:', err);
-          this.error.set('Failed to update user. Please try again.');
-          return throwError(() => err);
-        }),
-        finalize(() => this.loading.set(false)),
-      )
-      .subscribe((updatedUser) => {
-        this._users.update((current) =>
-          current.map((u) => (u.id === updatedUser.id ? updatedUser : u)),
-        );
-      });
+    try {
+      const updatedUser = await this.runRequest<User>(() => ({ url: `${this.apiUrl}/${user.id}`, method: 'PUT', body: user }));
+      this.usersResource.reload();
+      return updatedUser;
+    } catch (err) {
+      console.error('Failed to update user:', err);
+      throw err;
+    }
   }
 
   // Delete a user
-  deleteUser(id: string) {
-    this.loading.set(true);
-    this.error.set(null);
-
-    return this.http
-      .delete<User>(`${this.apiUrl}/${id}`)
-      .pipe(
-        catchError((err) => {
-          console.error('Failed to delete user:', err);
-          this.error.set('Failed to delete user. Please try again.');
-          return throwError(() => err);
-        }),
-        finalize(() => this.loading.set(false)),
-      )
-      .subscribe(() => {
-        this._users.update((current) => current.filter((u) => u.id !== id));
-      });
+  async deleteUser(id: string) {
+    try {
+      await this.runRequest<void>(() => ({ url: `${this.apiUrl}/${id}`, method: 'DELETE' }));
+      this.usersResource.reload();
+    } catch (err) {
+      console.error('Failed to delete user:', err);
+      throw err;
+    }
   }
 }
