@@ -86,3 +86,26 @@ Angular was chosen as the last thing I achieved, with the latest versions of thi
 After a basic bootstrap, I used prompts to get the color theme, layout, and table. The dialog components skeleton was generated initially and then fine-tuned.
 The same goes for the service responsible for fetching. Styles are almost AI-based on Material UI.
 Mock server I did manually and mapped data too (using Faker.JS). I used Gemini Flash Preview on a free tier. 
+
+## Project analysis
+
+The application is a single-page Angular dashboard. `src/app/app.ts` owns navigation, summary cards, and dialog state. `src/app/services/user.service.ts` loads users from the remote mock API, filters them in memory, and sends create, update, and delete requests. The remaining tabs display fixed sample data.
+
+### Findings
+
+1. **Mutation failures have no visible recovery path.** The add/edit and delete dialogs close immediately. `App.onSaveUser()` and `App.onConfirmDelete()` do not await the service requests or report failures to the user. A failed request can therefore appear to have succeeded.
+2. **Filters cannot be combined.** Search input, department selection, and summary cards all replace the same `searchTerm` signal. The department dropdown can still show a selection after another control has replaced its filter.
+3. **Some controls are demonstrations only.** The invitation form and the settings and system buttons have no actions. Role counts, security and activity logs, teams, invitations, policies, and attendance are fixed sample data rather than API-backed views.
+4. **Tests cover only startup.** `src/app/app.spec.ts` checks that the root component is created. It does not exercise filtering, CRUD requests, or failure handling.
+5. **API selection requires a source edit.** The service hardcodes the remote API URL and keeps the local URL commented out. The local-server instructions above also refer to a `.js` file; the actual source is `src/app/services/user.service.ts`.
+
+### Verification
+
+On October 5, 2026, the production build (`npm run build`), the single test (`npm test -- --watch=false`), and the TypeScript check (`./node_modules/.bin/tsc -p tsconfig.app.json --noEmit`) passed. The build aborted with exit code 134 inside the restricted sandbox, then passed when run outside it.
+
+### Suggested order of work
+
+1. Keep dialogs open until mutations succeed and show actionable errors when they fail.
+2. Give search, department, and summary-card filters separate state so they can work together.
+3. Add focused tests for those flows and for API failures.
+4. Move the API URL into environment-specific configuration and label or implement demonstration controls.
